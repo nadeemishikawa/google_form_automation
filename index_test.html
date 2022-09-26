@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>入力済検温フォームジェネレーター</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+    .m-form-text {
+    height: 2.4em;
+    width: 42%;
+    padding: 0 16px;
+    border-radius: 4px;
+    border: none;
+    box-shadow: 0 0 0 1px #ccc inset;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    }
+
+    .m-form-text:focus {
+        outline: 0;
+        box-shadow: 0 0 0 2px rgb(33, 150, 243) inset;
+    }
+    .form-submit-button {
+    display: inline-block;
+    width: 60%;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+    font-weight: bold;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    border: 2px solid transparent;
+    }
+
+    .form-submit-button:hover {
+        background-color: #000;
+    }
+
+    .form-submit-button:focus {
+        outline: 0;
+        background-color: #000;
+        border: 2px solid rgb(33, 150, 243);
+    }
+
+    .outer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+
+    .item{
+        font-size: 18px;
+    }
+    
+    
+</style>
+</head>
+<body>
+<div class="outer">
+    <div class="inner">
+        <h3>入力済検温フォームジェネレーター</h3>
+
+        <div class="item">
+            <p>
+            <label>所属団体：
+                <select name="prefecture" id = "GROUP_NAME" class="m-form-select" required>
+                <option value="">選択してください</option>
+                <option value="なでぃーむ" >なでぃーむ</option>
+                <option value="青森県">青森県 下記省略</option>
+                </select>
+            </label>
+            </p>
+        </div>
+
+
+        <div class="item">
+            <p>
+                <label>学籍番号：<input type="text" id="STUDENT_NUMBER" class="m-form-text" required></label>
+            </p>
+        </div>
+
+        <div class="item">
+            <p>
+                <label>名前：<input type="text" id="STUDENT_NAME" class="m-form-text" required></label>
+            </p>
+        </div>
+
+        <div class="item">
+            <label>外出：
+                <select name="prefecture" id = "PLACE_NAME" class="m-form-select" required>
+                    <option value="">選択してください</option>
+                    <option value="学校" >学校</option>
+                    <option value="バイト">バイト</option>
+                    <option value="自宅から出ていない">自宅から出ていない</option>
+                    <option value="買い物">買い物</option>
+                    <option value="バイト">部・サークル</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="btn">
+            <p>
+                <input type="button" value="リンクを生成する" id="checkButton" class="form-submit-button">
+            </p>
+        </div>
+
+        <a href="javascript:get_url()">
+            <p id="msg"></p> 
+        </a>
+    </div>
+</div> 
+        <p id="link"></p>
+
+        
+
+   
+
+<script>
+let new_url;
+function butotnClick(){
+    let pre_GROUP_NAME = document.getElementById('GROUP_NAME');
+    let GROUP_NAME = encodeURIComponent(pre_GROUP_NAME.value)
+    let pre_STUDENT_NUMBER = document.getElementById('STUDENT_NUMBER');
+    let STUDENT_NUMBER = encodeURIComponent(pre_STUDENT_NUMBER.value)
+    let pre_STUDENT_NAME = document.getElementById('STUDENT_NAME');
+    let STUDENT_NAME = encodeURIComponent(pre_STUDENT_NAME.value)
+    let pre_PLACE_NAME = document.getElementById('PLACE_NAME');
+    let PLACE_NAME = encodeURIComponent(pre_PLACE_NAME.value)
+
+    let morining_temp = 36 + getRandomInt(1, 7) / 10;
+    let night_temp = 36 + getRandomInt(1, 7) / 10;
+    let check_box01 = encodeURIComponent('ありません。');
+    let check_box02 = encodeURIComponent('了解しました。');
+
+    
+    // 事前入力されたurlを生成
+    let url = 'https://docs.google.com/forms/d/e/1FAIpQLSdELat41CE3MvmKScNKONyMSTMtRmGyQQJnOvZ49Y0ApIJ_yQ/viewform';
+    new_url = url+'?usp=pp_url&entry.987697424='+GROUP_NAME+'&entry.1451746778='+STUDENT_NUMBER+'&entry.15528679='+STUDENT_NAME+'&entry.559706162='+morining_temp+'&entry.60078259='+night_temp+'&entry.793511166='+PLACE_NAME+'&entry.963226943='+check_box01+'&entry.52692009='+check_box02;
+
+
+    msg.innerText = '入力済フォームへのリンク';
+    link.innerText = new_url
+    
+}
+function get_url(){
+    location.href = new_url;
+}
+
+
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
+
+let msg = document.getElementById('msg');
+
+let checkButton = document.getElementById('checkButton');
+checkButton.addEventListener('click', butotnClick);
+
+</script>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyC4rx454u0qcp8khCGCY0d1CWehpBcJDSQ",
+      authDomain: "filled-form-generator.firebaseapp.com",
+      projectId: "filled-form-generator",
+      storageBucket: "filled-form-generator.appspot.com",
+      messagingSenderId: "82195683823",
+      appId: "1:82195683823:web:5e00783420e9870d8c7e1a",
+      measurementId: "G-6FS7QF1W88"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+
+</body>
+</html>
